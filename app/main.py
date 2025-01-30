@@ -3,17 +3,17 @@ import xml.etree.ElementTree as ET
 
 
 class Book:
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         self.title = title
         self.content = content
 
-    def display(self, display_type):
+    def display(self, display_type: str) -> None:
         pass
 
-    def print(self, print_type):
+    def print(self, print_type: str) -> None:
         pass
 
-    def serialize(self, serializer_type):
+    def serialize(self, serializer_type: str) -> None:
         pass
 
 
@@ -30,7 +30,7 @@ class BookDisplay(Book):
 
 class BookPrint(Book):
 
-    def print(self, print_type):
+    def print(self, print_type: str) -> None:
         if print_type == "console":
             print(f"Printing the book: {self.title}...")
             print(self.content)
@@ -43,7 +43,7 @@ class BookPrint(Book):
 
 class BookSerializer(Book):
 
-    def serialize(self, serializer_type):
+    def serialize(self, serializer_type: str) -> str:
         if serializer_type == "json":
             return json.dumps({"title": self.title, "content": self.content})
         elif serializer_type == "xml":
@@ -60,11 +60,20 @@ class BookSerializer(Book):
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
-            BookDisplay(title=book.title, content=book.content).display(display_type=method_type)
+            BookDisplay(title=book.title, content=book.content).display(
+                display_type=method_type
+            )
         elif cmd == "print":
-            BookPrint(title=book.title, content=book.content).print(print_type=method_type)
+            BookPrint(title=book.title, content=book.content).print(
+                print_type=method_type
+            )
         elif cmd == "serialize":
-            return BookSerializer(title=book.title, content=book.content).serialize(serializer_type=method_type)
+            return BookSerializer(
+                title=book.title,
+                content=book.content
+            ).serialize(
+                serializer_type=method_type
+            )
 
 
 if __name__ == "__main__":
