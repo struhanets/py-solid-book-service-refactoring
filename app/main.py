@@ -7,6 +7,18 @@ class Book:
         self.title = title
         self.content = content
 
+    def display(self, display_type):
+        pass
+
+    def print(self, print_type):
+        pass
+
+    def serialize(self, serializer_type):
+        pass
+
+
+class BookDisplay(Book):
+
     def display(self, display_type: str) -> None:
         if display_type == "console":
             print(self.content)
@@ -15,7 +27,10 @@ class Book:
         else:
             raise ValueError(f"Unknown display type: {display_type}")
 
-    def print_book(self, print_type: str) -> None:
+
+class BookPrint(Book):
+
+    def print(self, print_type):
         if print_type == "console":
             print(f"Printing the book: {self.title}...")
             print(self.content)
@@ -25,10 +40,13 @@ class Book:
         else:
             raise ValueError(f"Unknown print type: {print_type}")
 
-    def serialize(self, serialize_type: str) -> str:
-        if serialize_type == "json":
+
+class BookSerializer(Book):
+
+    def serialize(self, serializer_type):
+        if serializer_type == "json":
             return json.dumps({"title": self.title, "content": self.content})
-        elif serialize_type == "xml":
+        elif serializer_type == "xml":
             root = ET.Element("book")
             title = ET.SubElement(root, "title")
             title.text = self.title
@@ -36,17 +54,17 @@ class Book:
             content.text = self.content
             return ET.tostring(root, encoding="unicode")
         else:
-            raise ValueError(f"Unknown serialize type: {serialize_type}")
+            raise ValueError(f"Unknown serialize type: {serializer_type}")
 
 
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
-            book.display(method_type)
+            BookDisplay(title=book.title, content=book.content).display(display_type=method_type)
         elif cmd == "print":
-            book.print_book(method_type)
+            BookPrint(title=book.title, content=book.content).print(print_type=method_type)
         elif cmd == "serialize":
-            return book.serialize(method_type)
+            return BookSerializer(title=book.title, content=book.content).serialize(serializer_type=method_type)
 
 
 if __name__ == "__main__":
